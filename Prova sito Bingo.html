@@ -270,7 +270,7 @@
     </div>
     
     <div class="board" id="board">
-      <!-- La board verrà generata qui -->
+      <!-- Qui in teoria c'è la board -->
     </div>
   </div>
 
@@ -374,7 +374,7 @@
       ]
     };
 
-    // Icona di completamento (checkmark verde)
+    // RAMMUS OGHE
     const checkmarkIcon = "https://3.bp.blogspot.com/-tgcfFTOwlV8/WxGrCx_GmtI/AAAAAAABA1Q/CMFQdvzCOtkLhT56z7ZT1JQ_lOPRlSWTQCLcBGAs/s1600/7a102c939fd239aa.png";
 
     // ===== STATO DEL GIOCO =====
@@ -382,7 +382,7 @@
     let currentQuests = [];
     let completedQuests = new Set();
 
-    // ===== FUNZIONI UTILITY =====
+    // ===== FUNZIONI =====
     function shuffleArray(array) {
       const shuffled = [...array];
       for (let i = shuffled.length - 1; i > 0; i--) {
@@ -396,20 +396,18 @@
       const championNames = Object.keys(challengesData);
       return championNames[Math.floor(Math.random() * championNames.length)];
     }
-
-    // ===== FUNZIONI PRINCIPALI =====
     function createNewBoard() {
-      // 1. Scegli un campione casuale
+      // Get a random champ
       currentChampion = getRandomChampion();
       completedQuests.clear();
       
-      // 2. Aggiorna il nome del campione nell'interfaccia
+      // Champ name updater
       document.getElementById('current-champ').textContent = currentChampion;
       
-      // 3. Prendi le sfide del campione
+      // Get champ's challenges
       const champData = challengesData[currentChampion];
       
-      // 4. Mescola tutte le sfide
+      // Shuffle challenges
       const champEasy = shuffleArray([...champData.easy]);
       const champMedium = shuffleArray([...champData.medium]);
       const champHard = shuffleArray([...champData.hard]);
@@ -418,10 +416,10 @@
       const genMedium = shuffleArray([...genericChallenges.medium]);
       const genHard = shuffleArray([...genericChallenges.hard]);
 
-      // 5. Prepara l'array delle sfide
+      // Callenges Array
       currentQuests = [];
 
-      // RIGA EASY (3 celle)
+      // EASY RAW
       const easyRow = shuffleArray([
         { text: champEasy[0], isGeneric: false, difficulty: "easy" },
         { text: champEasy[1], isGeneric: false, difficulty: "easy" },
@@ -429,7 +427,7 @@
       ]);
       currentQuests.push(...easyRow);
 
-      // RIGA MEDIUM (3 celle)
+      // MEDIUM RAW
       const mediumRow = shuffleArray([
         { text: champMedium[0], isGeneric: false, difficulty: "medium" },
         { text: champMedium[1], isGeneric: false, difficulty: "medium" },
@@ -437,7 +435,7 @@
       ]);
       currentQuests.push(...mediumRow);
 
-      // RIGA HARD (3 celle)
+      // HARD RAW
       const hardRow = shuffleArray([
         { text: champHard[0], isGeneric: false, difficulty: "hard" },
         { text: champHard[1], isGeneric: false, difficulty: "hard" },
@@ -445,7 +443,7 @@
       ]);
       currentQuests.push(...hardRow);
 
-      // 6. Aggiorna l'interfaccia
+      // UI Updater
       renderBoard();
       updateCounter();
     }
@@ -457,13 +455,11 @@
         completedQuests.add(index);
       }
       renderBoard();
-      updateCounter();
     }
 
     function resetBoard() {
       completedQuests.clear();
       renderBoard();
-      updateCounter();
     }
 
     function renderBoard() {
@@ -496,9 +492,9 @@
         </div>
       `).join('');
     }
-    // ===== INIZIALIZZAZIONE =====
-    // Crea la prima board al caricamento della pagina
+    // Creating the board
     window.addEventListener('DOMContentLoaded', createNewBoard);
   </script>
 </body>
+
 </html>
