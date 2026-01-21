@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LoL Bingo 5x5</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0a0a0a;
+      --card-bg: #111113;
+      --border: #27272a;
+      --text: #fafafa;
+      --text-dim: #a1a1aa;
+      --cell-bg: rgba(255, 255, 255, 0.05);
+      --cell-border: rgba(255, 255, 255, 0.1);
+      --completed: #22c55e;
+    }
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 12px 8px;
+      font-size: 10px;
+    }
+    
+    .wrapper {
+      max-width: 320px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 24px;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+      background: linear-gradient(90deg, #8b5cf6, #3b82f6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .nav-controls {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    
+    .nav-btn {
+      flex: 1;
+      padding: 8px 12px;
+      border-radius: 4px;
+      background: linear-gradient(90deg, #8b5cf6, #3b82f6);
+      border: none;
+      color: white;
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-align: center;
+    }
+    
+    .nav-btn:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(139, 92, 246, 0.3);
+    }
+    
+    .nav-btn.active {
+      background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
+    }
+    
+    .bingo-board {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      grid-template-rows: repeat(5, 1fr);
+      gap: 3px;
+      margin-bottom: 12px;
+    }
+    
+    .bingo-cell {
+      aspect-ratio: 1;
+      background: var(--cell-bg);
+      border: 1.5px solid var(--cell-border);
+      border-radius: 4px;
+      cursor: pointer;
+      padding: 4px;
+      font-size: 7px;
+      line-height: 1.1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      transition: all 0.15s;
+      position: relative;
+      overflow: hidden;
+      word-break: break-word;
+      hyphens: auto;
+    }
+    
+    .bingo-cell .text {
+      display: -webkit-box;
+      -webkit-line-clamp: 5;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-height: 100%;
+    }
+
+    .bingo-cell:hover {
+      filter: brightness(1.3);
+      transform: translateY(-1px);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+    
+    .bingo-cell.done {
+      background: #22c55e !important;
+      border-color: #22c55e !important;
+      color: white !important;
+    }
+    
+    .bingo-cell.done .text {
+      display: none;
+    }
+    
+    .done-icon {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+      border-radius: 3px;
+    }
+    
+    .bingo-cell.done .done-icon {
+      display: block;
+    }
+    
+    .controls {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    
+    .ctrl-btn {
+      flex: 1;
+      padding: 6px 10px;
+      border-radius: 4px;
+      background: #1f2937;
+      border: 1px solid #374151;
+      color: var(--text);
+      font-size: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+    
+    .ctrl-btn:hover {
+      background: #374151;
+      border-color: #4b5563;
+    }
+    
+    .ctrl-btn.reset {
+      background: transparent;
+      border-color: var(--border);
+      color: var(--text-dim);
+      flex: 0.7;
+    }
+    
+    .info-text {
+      text-align: center;
+      font-size: 9px;
+      color: var(--text-dim);
+      margin-top: 8px;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="header">
+      <div class="title">LEAGUE BINGO 5x5</div>
+      <div class="champ-display">Champ: <strong id="current-champ">-</strong></div>
+      <div style="font-size: 11px; color: var(--text-dim); margin-top: 4px;">Complete a row, column, or diagonal to win!</div>
+    </div>
+    
+    <div class="nav-controls">
+      <button class="nav-btn" onclick="window.location.href='index.html'">
+        3x3 Challenge
+      </button>
+      <button class="nav-btn active" onclick="window.location.href='bingo.html'">
+        5x5 Bingo
+      </button>
+    </div>
+    
+    <div class="controls">
+      <button class="ctrl-btn" onclick="createNewBingo()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="9"/>
+            <path d="M16 8l-8 8M8 8l8 8"/>
+        </svg>
+        New Bingo
+      </button>
+      <button class="ctrl-btn reset" onclick="resetBingo()">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+          <path d="M3 3v5h5"/>
+        </svg>
+        Reset
+      </button>
+    </div>
+    
+    <div class="bingo-board" id="bingo-board">
+    </div>
+  </div>
+
+  <script>
+    const checkmarkIcon = "https://3.bp.blogspot.com/-tgcfFTOwlV8/WxGrCx_GmtI/AAAAAAABA1Q/CMFQdvzCOtkLhT56z7ZT1JQ_lOPRlSWTQCLcBGAs/s1600/7a102c939fd239aa.png";
+    
+    // CHAMPIONS DATABASE
+    const champions = [
+      'Cho\'Gath','Kayle','Teemo','Jhin','Tahm Kench','Ornn','Garen','Fiora','Sion', 'Gangplank', 'Viktor', 'Urky', 'Warwick', 'Veigar', 'Naafiri', 'Varus', 'Bard',
+      'Nautilus', 'Thresh', 'Neeko', 'Sylas', 'Braum', 'Smolder', 'Rengar', 'Viego', 'Volibear', 'Kindred', 'Hwei', 'Trundle', 'Nasus', 'Anivia', 'Pyke'
+    ];
+
+    
+    // CHALLENGE DATABASE
+    const bingoChallenges = [
+      'Get First Blood',
+      'Get a Double Kill',
+      'Get a Triple Kill',
+      'Get a Quadra Kill',
+      'Get a Pentakill (unofficial do count)',
+      'Get 2 Kills without Dying',
+      'Get 3 Kills without Dying',
+      'Get 4 Kills without Dying',
+      'Get 5 Kills without Dying',
+      'Get an assist before minute 10',
+      'Get 2 assists before minute 15',
+      'Get 3 assists before minute 25',
+      'Gain more than 10 assists',
+      'Don\'t die before minute 5 to an enemy',
+      'Don\'t die before minute 10 to an enemy',
+      'Don\'t die before minute 15 to an enemy',
+      'Die less than 3 times before third drake to an enemy',
+      'Die less than 3 times before Herald to an enemy',
+      'Die less than 5 times before Baron Nashor to an enemy',
+      'Die less than 7 times to an enemy',
+      'Die less than 10 times to an enemy',
+      'Die less than 12 times to an enemy',
+      'Build Rabadon',
+      'Build Boots as your last Item',
+      'Build Bloodthirster',
+      'Build Infinity Edge',
+      'Build Trinity Force',
+      'Build Overlord\'s Bloodmail',
+      'Build and activate Warmog\'s Armor',
+      'Build Heartsteel and get more than 200 stacks',
+      'Build Lord Dominik\'s Regards',
+      'Build Collector',
+      'Build Riftmaker',
+      'Build Void Staff',
+      'Build Cryptbloom',
+      'Build Yomuu\'s Ghostblade',
+      'Build Liandry\'s Torment',
+      'Buy Seeker\'s Armguard (you can\'t buy Zhonya\'s Hourglass nor sell it once it\'s used)',
+      'Buy Bloodletter\'s Curse',
+      'Build Tiamat (you can\'t build any Legendary Items with it nor sell it)',
+      'Buy Sheen (you can\'t build Legendary Items with it nor sell it)',
+      'Buy Bami\'s Cinder (you can\'t build Legendary Items with it nor sell it)',
+      'Buy Tear of the Goddess and build a Legendary Item with it',
+      'Buy Quicksilver Sash (you can\'t build Legendary Items with it nor sell it)',
+      'Buy Quicksilver Sash and build a Legendary Item with it',
+      'Buy 3 Culls (You can\'t sell them until their stacks hit 0)',
+      'Build Doran Shield as your first Item',
+      'Build Doran Sword as your first Item',
+      'Build Doran Ring as your first Item',
+      'Build Dark Seal as your first Item',
+      'Build Tear of the Goddess as your first Item',
+      'Build Longsword as your first Item',
+      'Fill your inventory with only signature components before completing your first Legendary Item',
+      'Sell two Legendary Items after minute 20',
+      'Sell one Legendary Item, you can\'t use that Item Slot again',
+      'Buy 10 Health Potions',
+      'Buy an Elisir after each Legendary Item',
+      'Buy Every Potion and Ward in the Shop',
+      'Execute yourself before Baron Nashor spawns',
+      'Execute yourself before Rift Herald spawns',
+      'Execute yourself before Void Grubs spawns',
+      'Execute yourself before 1st Dragon spawns',
+      'Execute yourself before 2nd Dragon spawns',
+      'Execute yourself before 3rd Dragon spawns',
+      'Execute yourself before 4th Dragon spawns',
+      'Execute yourself before Elder Dragon spawns',
+      'Gift a kill to enemy jungler',
+      'Get first tower',
+      'Destroy Two Towers',
+      'Destroy Three Towers',
+      'Destroy Four Towers',
+      'Destroy one Inhibitor',
+      'Destroy two Inhibitors',
+      'Destroy Three Inhibitors',
+      'Buy 5 Control Wards',
+      'Steal 5 enemy jungler\'s camp',
+      'Steal 10 enemy jungler\'s camp',
+      'Take Grasp of the Undying as your Key Rune',
+      'Take Press The Attack as your Key Rune',
+      'Take Lethal Tempo as your Key Rune',
+      'Take Conqueror as your Key Rune',
+      'Take Arcane Comet as your Key Rune',
+      'Take Aftershock as your Key Rune',
+      'Take Phase Rush as your Key Rune',
+      'Take Unsealed Spellbook as your Key Rune',
+      'Take Dark Harvest as your Key Rune',
+      'Take Flash as your summoner\'s spell (you can\'t use it)',
+      'Don\'t Flash before minute 5',
+      'Don\'t Flash before minute 10',
+      'Don\'t Flash before minute 15',
+      'Don\'t Flash before minute 20',
+      'Take Cleanse as your summoner\'s spell',
+      'Take Ignite as your summoner\'s spell',
+      'Take Heal as your Summoner\'s spell',
+      'Kill enemy mid laner twice before 20 minutes (assists counts)',
+      'Kill enemy jungler twice before 20 minutes (assists counts)',
+      'Kill enemy support twice before 20 minutes (assists counts)',
+      'Kill enemy ADC twice before 20 minutes (assists counts)',
+      'Gank Bot 3 times before minute 15',
+      'Gank Mid 3 times before minute 15',
+      'Invade enemy jungler 3 times before minute 15'
+    ];
+    
+    let bingoCells = [];
+    let completedBingoCells = new Set();
+    
+    function shuffleArray(array) {
+      const shuffled = [...array];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return shuffled;
+    }
+    
+    function getRandomChampion() {
+      return champions[Math.floor(Math.random() * champions.length)];
+    }
+    
+    function createNewBingo() {
+      completedBingoCells.clear();
+      
+      const randomChampion = getRandomChampion();
+      document.getElementById('current-champ').textContent = randomChampion;
+      
+      const shuffledChallenges = shuffleArray([...bingoChallenges]);
+      bingoCells = shuffledChallenges.slice(0, 25);
+      
+      renderBingoBoard();
+    }
+    
+    function toggleBingoCell(index) {
+      if (completedBingoCells.has(index)) {
+        completedBingoCells.delete(index);
+      } else {
+        completedBingoCells.add(index);
+      }
+      renderBingoBoard();
+      checkBingo();
+    }
+    
+    function resetBingo() {
+      completedBingoCells.clear();
+      
+      const randomChampion = getRandomChampion();
+      document.getElementById('current-champ').textContent = randomChampion;
+      renderBingoBoard();
+    }
+    
+    function renderBingoBoard() {
+      const boardElement = document.getElementById('bingo-board');
+      let html = '';
+      
+      for (let i = 0; i < 25; i++) {
+        const challenge = bingoCells[i];
+        const isCompleted = completedBingoCells.has(i);
+        
+        html += `
+          <div class="bingo-cell ${isCompleted ? 'done' : ''}" onclick="toggleBingoCell(${i})">
+            <span class="text">${challenge || 'BINGO'}</span>
+            <img class="done-icon" src="${checkmarkIcon}" alt="✓" />
+          </div>
+        `;
+      }
+      
+      boardElement.innerHTML = html;
+    }
+
+    window.addEventListener('DOMContentLoaded', createNewBingo);
+  </script>
+</body>
+</html>
