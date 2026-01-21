@@ -325,77 +325,470 @@
   <script>
     // ===== CHAMP CHALLENGES DATABASE =====
     const challengesData = {
-      "Cho'gath": {
-        easy: [
-          "Kill enemy top with Q before 5min",
-          "Silence 2 enemies with one W"
-        ],
-        medium: [
-          "Eat Rift Herald with R",
-          "Eat enemy buff with R before 15min"
-        ],
-        hard: [
-          "Hit top laner 3 times in a row with Q",
-          "Get 20 R stacks before 30min"
-        ]
-      },
-      "Yorick": {
-        easy: [
-          "Trap enemy top in W before 5min",
-          "Summon 4 ghouls with one Q"
-        ],
-        medium: [
-          "Summon <5 Maidens all game",
-          "Defeat Drake with Maiden"
-        ],
-        hard: [
-          "Protect Maiden for 8min",
-          "Hit 2 towers simultaneously"
-        ]
-      },
-      "Kayle": {
-        easy: [
-          "Use R to save an ally once",
-          "Buy T2 boots after first Legendary"
-        ],
-        medium: [
-          "Activate passive before level 3",
-          "Survive fatal damage with R"
-        ],
-        hard: [
-          "Get Double Kill before 25min",
-          "No Flash for first 7min"
-        ]
-      },
-      "Teemo": {
-        easy: [
-          "Blind enemy top at Level 1",
-          "Kill with poison (no AA)"
-        ],
-        medium: [
-          "Blind same champ 3 times in a row",
-          "Place 10 mushrooms before 12min"
-        ],
-        hard: [
-          "Hit 3 enemies with one Trap",
-          "Place mushrooms around Baron pre-21"
-        ]
-      },
-      "Jhin": {
-        easy: [
-          "Hit top laner 4 times with Q",
-          "Kill 4 cannons with 4th shot"
-        ],
-        medium: [
-          "Make W hit 4 minions in 1 cast",
-          "Kill 4 minions with one Q"
-        ],
-        hard: [
-          "Get 4 kills in a row (no death)",
-          "Kill same enemy 4 times"
-        ]
-      }
-    };
+  "Cho'gath": {
+    easy: [
+      "Silence two enemies with one W",
+      "Eat 1 Cannon Minion in bot lane before minute 10"
+    ],
+    medium: [
+      "Hit 2, or more, enemies with one Q",
+      "Eat the enemy's Blue/Red buff before minute 15"
+    ],
+    hard: [
+      "Hit the enemy top laner 3 times in a row with your Q",
+      "Get a total of 20 stacks of your R before minute 30"
+    ]
+  },
+  "Yorick": {
+    easy: [
+      "Summon 4 ghouls with one Q",
+      "Trap the enemy top laner in your W before minute 5"
+    ],
+    medium: [
+      "Defeat a Drake with your Maiden",
+      "Protect your Maiden for 5 minutes"
+    ],
+    hard: [
+      "Steal one of enemy's jungle camp 3 times with your E",
+      "Hit 2 towers at the same time"
+    ]
+  },
+  "Kayle": {
+    easy: [
+      "Reach Kayle's full potential (level 16)",
+      "Use your R to save an ally once"
+    ],
+    medium: [
+      "Activate your passive before reaching level 3",
+      "Heal an ally with your W 5 times"
+    ],
+    hard: [
+      "Kill an enemy champion without using your R",
+      "End the game with more than 5 Kills"
+    ]
+  },
+  "Teemo": {
+    easy: [
+      "Blind the enemy top laner at Level 1",
+      "Kill the enemy top laner with your poison once"
+    ],
+    medium: [
+      "Place 10 mushrooms before minute 12",
+      "Make enemies step through your mushrooms 5 times"
+    ],
+    hard: [
+      "Stay Invisible for 120 seconds straight in lane",
+      "Hit 3 enemies with a single Trap"
+    ]
+  },
+  "Jhin": {
+    easy: [
+      "Hit the enemy top laner 4 times with your Q",
+      "Kill 4 cannon minions with your 4th shot"
+    ],
+    medium: [
+      "Stun an enemy champion with your W 4 times",
+      "Make your W hit 4 minions in 1 cast once"
+    ],
+    hard: [
+      "Hit 4 enemy champion with your R",
+      "Kill the same enemy champion 4 times"
+    ]
+  },
+  "Tahm Kench": {
+    easy: [
+      "Stun enemy top laner with your Q once before minute 5",
+      "Knock up two enemies with one W"
+    ],
+    medium: [
+      "Protect your ADC with you R once",
+      "Eat and Kill the enemy top laner twice"
+    ],
+    hard: [
+      "Eat an enemy and let the tower kill him",
+      "Hit your Q three times in a row"
+    ]
+  },
+  "Ornn": {
+    easy: [
+      "Craft a Masterwork Item",
+      "Knock up an enemy champion with your R before minute 10"
+    ],
+    medium: [
+      "Knock up 2 enemies with your E",
+      "Buy a Legendary Item without recalling"
+    ],
+    hard: [
+      "Don't recall after buying your second Legendary Item (Warmog)",
+      "Knock up 3 enemies with your R"
+    ]
+  },
+  "Garen": {
+    easy: [
+      "Kill a full wave of minions with your E",
+      "Kill an enemy champion without using your R"
+    ],
+    medium: [
+      "Kill enemy top laner with your R twice before minute 15",
+      "Silence all enemy champions with your Q once"
+    ],
+    hard: [
+      "Kill 3 different champions with your R",
+      "Block 3 CCs with your E"
+    ]
+  },
+  "Fiora": {
+    easy: [
+      "Hit a Vital before minute 3",
+      "Block Damage with your W twice in a row"
+    ],
+    medium: [
+      "Stun an enemy champion with your W",
+      "Dodge a CC with your Q"
+    ],
+    hard: [
+      "Hit a Vital on every enemy champion once",
+      "Kill three enemy champions while hitting a Vital"
+    ]
+  },
+  "Sion": {
+    easy: [
+      "Stun the enemy top laner with you Q before minute 5",
+      "Re-Cast your W on 2 enemy champions at once"
+    ],
+    medium: [
+      "Knock up 2 enemies with one R",
+      "Kill an enemy while your passive is active"
+    ],
+    hard: [
+      "Hit the enemy top laner with your Q three times in a row",
+      "Destroy Two towers with your R"
+    ]
+  },
+  "Gangplank": {
+    easy: [
+      "Clear a CC with your W twice",
+      "Kill the enemy top laner with your Q before minute 10"
+    ],
+    medium: [
+      "Kill an enemy from a different lane",
+      "Chain, and explode, 3 Barrels"
+    ],
+    hard: [
+      "Kill 2 enemies with your R",
+      "Kill the enemy top laner with your E 3 times in a row"
+    ]
+  },
+  "Viktor": {
+    easy: [
+      "Evolve 2 abilities",
+      "Stun a champion with your W 3 times"
+    ],
+    medium: [
+      "Evolve one ability before minute 15",
+      "Kill 2 enemies with one R"
+    ],
+    hard: [
+      "Stun 2 enemies with one W",
+      "Power-up your R 5 times"
+    ]
+  },
+  "Udyr": {
+    easy: [
+      "Cast an empowered ability before minute 3",
+      "Kill an enemy with your Q's lightnings"
+    ],
+    medium: [
+      "Dodge a CC with your E",
+      "Kill the enemy top laner without your W"
+    ],
+    hard: [
+      "Kill two enemies with your empowered R",
+      "Kill an enemy without re-casting your abilities"
+    ]
+  },
+  "Warwick": {
+    easy: [
+      "Kill the enemy top laner before minute 10",
+      "Fear an enemy 3 times"
+    ],
+    medium: [
+      "Hit the same enemy champion with your R twice",
+      "Fear 2, or more, enemies with one E"
+    ],
+    hard: [
+      "Follow a dash, or flash, with your Q",
+      "Kill 3 enemies with your Mark before minute 15"
+    ]
+  },
+  "Veigar": {
+    easy: [
+      "Get more than 150 stacks",
+      "Stun enemy top laner with your E twice"
+    ],
+    medium: [
+      "Kill an enemy using only your R",
+      "Stun 2 enemies with one E"
+    ],
+    hard: [
+      "Reach 300 stacks",
+      "Hit an enemy with your W twice in a row"
+    ]
+  },
+  "Naafiri": {
+    easy: [
+      "Hit enemy top laner with 3 wolves before minute 5",
+      "Avoid damage with your W"
+    ],
+    medium: [
+      "Dodge a CC with your W twice",
+      "Damage 2 enemies with one E"
+    ],
+    hard: [
+      "Have your pack surpass 10 members",
+      "Get a shield with your R twice"
+    ]
+  },
+  "Varus": {
+    easy: [
+      "Stun 3 enemies with your R",
+      "One-shot an enemy champion with your Q"
+    ],
+    medium: [
+      "Fully stack your Blight on every enemy champion",
+      "Hit 2, or more, people with one E"
+    ],
+    hard: [
+      "Stun 2 enemy champions with one R",
+      "Hit the same champion with a fully charged Q 3 times in a row"
+    ]
+  },
+  "Bard": {
+    easy: [
+      "Gather 10 bells before minute 15",
+      "Stun the enemy top laner with your Q twice in a row"
+    ],
+    medium: [
+      "Prevent fatal damage to an ally with your R",
+      "Put in stasis three enemy champions with one R"
+    ],
+    hard: [
+      "Have 9 Meeps follow you once",
+      "Stun two, or more, enemies with one Q"
+    ]
+  },
+  "Nautilus": {
+    easy: [
+      "Stun the enemy top laner 3 times",
+      "Stun the same champion 3 times in a row with your passive"
+    ],
+    medium: [
+      "Hit 2 enemies with your W",
+      "Take an enemy champion under tower with your Q"
+    ],
+    hard: [
+      "Knock-up 3 enemies with one R",
+      "Land your Q three times in a row"
+    ]
+  },
+  "Thresh": {
+    easy: [
+      "Save your ADC from a fight with your W",
+      "Knock away 2 champions with one E"
+    ],
+    medium: [
+      "Take an enemy champion under tower with your Q",
+      "Slow down 2, or more, enemies with one R"
+    ],
+    hard: [
+      "Reach 100 souls collected",
+      "Land your Q three times in a row on the same champion"
+    ]
+  },
+  "Neeko": {
+    easy: [
+      "Stay disguised for the first 3 minutes of the game",
+      "Disguise as every allied champions once"
+    ],
+    medium: [
+      "Disguise as every allied champions once",
+      "Kill the enemy jungler by disguising as one of his camps",
+      "Stun two enemies with one E"
+    ],
+    hard: [
+      "Disguise as all neutral monsters once",
+      "Stun 4 enemies with one R"
+    ]
+  },
+  "Sylas": {
+    easy: [
+      "Stun the enemy top laner 2 times in a row before minute 5",
+      "Fully stack your passive twice against the enemy top laner"
+    ],
+    medium: [
+      "Steal all your enemies Rs",
+      "Hit an enemy twice with one Q"
+    ],
+    hard: [
+      "Kill an enemy with their own R",
+      "Kill 3 different enemies with 3 different Rs"
+    ]
+  },
+  "Braum": {
+    easy: [
+      "Fully stack your passive before minute 3",
+      "Hit enemy top laner with your Q 3 times in a row"
+    ],
+    medium: [
+      "Shield your teammate from fatal damage 5 times",
+      "Slow 3 enemies with one R"
+    ],
+    hard: [
+      "Stun 3 enemies with your R",
+      "Fully stack your passive on all enemies once"
+    ]
+  },
+  "Smolder": {
+    easy: [
+      "Fully stack your passive",
+      "Hit 2 enemies with one W"
+    ],
+    medium: [
+      "Hit 3 enemies with one Q",
+      "Reach 25 stacks by minute 5"
+    ],
+    hard: [
+      "Hit 3 enemies with one R",
+      "Reach 225 stacks before minute 30"
+    ]
+  },
+  "Rengar": {
+    easy: [
+      "Hunt enemy top laner with your R twice",
+      "Don't stand in bushed for the first 5 minutes of the game"
+    ],
+    medium: [
+      "Stun every enemy with your E",
+      "Kill two different enemies by minute 15"
+    ],
+    hard: [
+      "Kill every enemy once",
+      "Clean 2 CCs with your W"
+    ]
+  },
+  "Viego": {
+    easy: [
+      "Stun enemy top laner 2 times in a row",
+      "Steal a shadow before minute 10"
+    ],
+    medium: [
+      "Execute every enemy once with your R",
+      "Kill an enemy while being inside your E"
+    ],
+    hard: [
+      "Take control of all enemies's shadows",
+      "Use your R 3 times in a row in 1 teamfight"
+    ]
+  },
+  "Volibear": {
+    easy: [
+      "Fully stack your passive before minute 3",
+      "Stun the enemy top laner level 1"
+    ],
+    medium: [
+      "Mark all enemies with your W",
+      "Hit 2 enemies with one E"
+    ],
+    hard: [
+      "Disable 5 towers with your R",
+      "Hit 3 enemies with one R"
+    ]
+  },
+  "Kindred": {
+    easy: [
+      "Hit 3 enemies with one Q",
+      "Stack your E on every enemy once"
+    ],
+    medium: [
+      "Prevent an ally's death with your R twice",
+      "Claim your first mark before minute 10"
+    ],
+    hard: [
+      "Reach 10 marks",
+      "Prevent the death of 3 people with one R"
+    ]
+  },
+  "Hwei": {
+    easy: [
+      "Cast your Q in three different ways",
+      "Cast your E in three different ways"
+    ],
+    medium: [
+      "Cast your W in three different ways",
+      "Hit 2 enemies with one activation of your passive"
+    ],
+    hard: [
+      "Cast all forms of your abilities",
+      "Kill 2 enemies with one R"
+    ]
+  },
+  "Trundle": {
+    easy: [
+      "Kill the enemy top laner with your Q 3 times",
+      "Destroy a tower plate before minute 5 with your W"
+    ],
+    medium: [
+      "Slow 2 enemies with one E",
+      "Destroy 4 towers while being inside your W"
+    ],
+    hard: [
+      "Activate your passive 3 times in a teamfight",
+      "Kill an enemy with your R (last hit must be your R)"
+    ]
+  },
+  "Nasus": {
+    easy: [
+      "Slow every enemy with your W once",
+      "One-Shot an enemy with one Q"
+    ],
+    medium: [
+      "Hit 3 enemies with one E",
+      "Reach 100 stacks at minute 15"
+    ],
+    hard: [
+      "Reach 300 stacks",
+      "Win a fight without your R"
+    ]
+  },
+  "Anivia": {
+    easy: [
+      "Damage 3 enemies with one R",
+      "Survive while being an egg"
+    ],
+    medium: [
+      "Block your minions with your W from reaching lane",
+      "Stun every champion with your Q before minute 15"
+    ],
+    hard: [
+      "Kill 2 enemies with one R",
+      "Survive a teamfight without reverting to your egg-form"
+    ]
+  },
+  "Pyke": {
+    easy: [
+      "Give gold to 3 allies with your R",
+      "Stun enemy top laner twice before minute 5"
+    ],
+    medium: [
+      "Land your Q twice in a row",
+      "Stun 2 enemies with one E"
+    ],
+    hard: [
+      "Execute every enemy with your R",
+      "Chain your R 3 times in a teamfight"
+    ]
+  }
+};
 
     // ===== GENERUC CHALLENGES DATABASE =====
     const genericChallenges = {
@@ -659,3 +1052,4 @@
 
 
 </html>
+
